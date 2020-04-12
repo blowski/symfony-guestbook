@@ -28,4 +28,12 @@ class ConferenceController
         ]));
     }
 
+    /**
+     * @Route("/", name="homepage", methods={"GET"})
+     */
+    public function homepage(): Response
+    {
+        return new Response('<html><body>Hello, this website is under construction.</body></html>');
+    }
+
 }

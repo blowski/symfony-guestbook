@@ -28,7 +28,7 @@ class Conference
     /**
      * @ORM\Column(type="string", nullable=true, length=4)
      */
-    private ?string $year;
+    private ?string $year = null;
 
     /**
      * @ORM\Column(type="boolean")
@@ -40,10 +40,15 @@ class Conference
      */
     private Collection $comments;
 
-    public function __construct(string $id)
+    public function __construct()
     {
         $this->id = Uuid::uuid4()->toString();
         $this->comments = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->city . ' (' . $this->year . ')';
     }
 
     public function getId(): string

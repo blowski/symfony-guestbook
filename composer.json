@@ -5,6 +5,7 @@
         "php": "^7.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "easycorp/easyadmin-bundle": "^2.3",
         "ramsey/uuid": "^4.0",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "5.0.*",
@@ -25,7 +26,7 @@
         "symfony/serializer-pack": "*",
         "symfony/string": "5.0.*",
         "symfony/translation": "5.0.*",
-        "symfony/twig-pack": "*",
+        "symfony/twig-pack": "^1.0",
         "symfony/validator": "5.0.*",
         "symfony/web-link": "5.0.*",
         "symfony/yaml": "5.0.*"
