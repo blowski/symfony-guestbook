@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 
@@ -21,37 +23,32 @@ class Conference
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private ?string $city;
+    private ?string $city = null;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", nullable=true, length=4)
      */
-    private ?string $author = null;
+    private ?string $year;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="boolean")
      */
-    private ?string $text = null;
+    private bool $isInternational = false;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="conference", orphanRemoval=true)
      */
-    private DateTimeImmutable $createdAt;
+    private Collection $comments;
 
     public function __construct(string $id)
     {
         $this->id = Uuid::uuid4()->toString();
-        $this->createdAt = new DateTimeImmutable();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): string
     {
         return $this->id;
-    }
-
-    public function getCreatedAt(): DateTimeImmutable
-    {
-        return $this->createdAt;
     }
 
     public function getCity(): ?string
@@ -64,24 +61,47 @@ class Conference
         $this->city = $city;
     }
 
-    public function getAuthor(): ?string
+    public function getYear(): ?string
     {
-        return $this->author;
+        return $this->year;
     }
 
-    public function setAuthor(?string $author): void
+    public function setYear(?string $year): void
     {
-        $this->author = $author;
+        $this->year = $year;
     }
 
-    public function getText(): ?string
+    public function isInternational(): bool
     {
-        return $this->text;
+        return $this->isInternational;
     }
 
-    public function setText(?string $text): void
+    public function setIsInternational(bool $isInternational): void
     {
-        $this->text = $text;
+        $this->isInternational = $isInternational;
+    }
+
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): void
+    {
+        if(!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setConference($this);
+        }
+    }
+
+    public function removeComment(Comment $comment): void
+    {
+        if($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            if($comment->getConference() === $this) {
+                $comment->setConference(null);
+            }
+        }
     }
 }
 
